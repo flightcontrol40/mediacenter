@@ -113,8 +113,9 @@ __If you are new to the *Arr stack, you must read the [Servarr Wiki](https://wik
 10. Setup Overseerr.
 11. Setup Prowlarr (no need to setup a Download Client).
     - Consult the Servarr Wiki for guidance if needed.
-    - If you want to use Torrentio and/or Zilean:
+    - If you want to use Torrentio:
         - Grab the files from [here](https://github.com/dreulavelle/Prowlarr-Indexers/tree/main/Custom) and place them inside `${ROOT_DIR}/config/prowlarr-config/Definitions/Custom/`.
+    - For Zilean, see the instructions [here](https://ipromknight.github.io/zilean/torznab-indexer.html#setting-up-as-torznab-indexer-for-prowlarr).
     - Configure indexers.
 12. Setup Autoscan.
     - Place the file `./autoscan/config.yml` in `${ROOT_DIR}/config/autoscan-config`.
@@ -138,4 +139,4 @@ Place the file `./recyclarr/recyclarr.yaml` in `${ROOT_DIR}/config/recyclarr-con
 - [Sailarr's Guide](https://savvyguides.wiki/sailarrsguide/).
 - [Ezarr](https://github.com/Luctia/ezarr). Laid down the foundation using their approach. GOATs.
 - [Debrid Media Manager](https://github.com/debridmediamanager/debrid-media-manager). Was my first look into the world of Debrid services.
-- [dreulavelle/Prowlarr-Indexers](https://github.com/dreulavelle/Prowlarr-Indexers) for the Prowlarr torrentio and zilean configs.
+- [dreulavelle/Prowlarr-Indexers](https://github.com/dreulavelle/Prowlarr-Indexers) for the Prowlarr torrentio config.
