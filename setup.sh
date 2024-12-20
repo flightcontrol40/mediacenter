@@ -39,7 +39,7 @@ sudo usermod -a -G mediacenter autoscan
 # Create directories.
 # ${ROOT_DIR:-.}/ means take the value from ROOT_DIR value, if failed or empty place it in the current folder.
 # Application Configuration directories.
-sudo mkdir -pv ${ROOT_DIR:-.}/config/{sonarr,radarr,recyclarr,prowlarr,overseerr,plex,rdt,autoscan}-config
+sudo mkdir -pv ${ROOT_DIR:-.}/config/{sonarr,radarr,recyclarr,prowlarr,overseerr,plex,rdt,autoscan,zilean}-config
 # Symlink directories.
 sudo mkdir -pv ${ROOT_DIR:-.}/data/symlinks/{radarr,sonarr}
 # Location symlinks resolve to.

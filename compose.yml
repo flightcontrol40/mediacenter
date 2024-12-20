@@ -1,5 +1,30 @@
 name: MediaCenter
 services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    environment:
+      - TZ=${TIMEZONE}
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_REMOVE_VOLUMES=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_INCLUDE_STOPPED=false
+      - WATCHTOWER_REVIVE_STOPPED=false
+      - WATCHTOWER_SCHEDULE=0 0 4 * * *
+      - WATCHTOWER_LABEL_ENABLE=false # opt-out of updating
+      - WATCHTOWER_MONITOR_ONLY=false
+      - WATCHTOWER_LABEL_TAKE_PRECEDENCE=false
+      - WATCHTOWER_NO_RESTART=false
+      - WATCHTOWER_NO_PULL=false
+      - WATCHTOWER_NO_STARTUP_MESSAGE=false
+      - WATCHTOWER_RUN_ONCE=false
+      - WATCHTOWER_HTTP_API_UPDATE=false
+      - WATCHTOWER_HTTP_API_PERIODIC_POLLS=false
+      - WATCHTOWER_HTTP_API_METRICS=false
+      - WATCHTOWER_ROLLING_RESTART=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   zurg:
     image: ghcr.io/debridmediamanager/zurg-testing:latest
     container_name: zurg
@@ -79,7 +104,6 @@ services:
     restart: unless-stopped
     depends_on:
       - rclone
-
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -181,43 +205,42 @@ services:
       - plex
 
   zilean:
-    image: ipromknight/zilean:v1.5.3
-    restart: unless-stopped
-    container_name: zilean
-    ports:
-      - "8181:8181"
-    volumes:
-      - zilean_data:/app/data
-    environment:
-        Zilean__Database__ConnectionString: "Host=zilean-postgres;Port=5432;Database=zilean;Username=postgres;Password=postgres"
-    healthcheck:
-      test: curl --connect-timeout 10 --silent --show-error --fail http://localhost:8181/healthchecks/ping
-      timeout: 60s
-      interval: 30s
-      retries: 10
-    depends_on:
-      zilean-postgres:
-        condition: service_healthy
+   image: ipromknight/zilean:v3.3.0
+   container_name: zilean
+   tty: true
+   volumes:
+     - ${ROOT_DIR}/config/zilean-config:/app/data
+     - zilean_tmp:/tmp
+   ports:
+     - "8181:8181"
+   restart: unless-stopped
+   healthcheck:
+     test: curl --connect-timeout 10 --silent --show-error --fail http://localhost:8181/healthchecks/ping
+     timeout: 60s
+     interval: 30s
+     retries: 10
+   depends_on:
+     zilean-postgres:
+       condition: service_healthy
 
   zilean-postgres:
-    image: postgres:16.3-alpine3.20
-    container_name: zilean-postgres
-    environment:
+   image: postgres:17.1
+   container_name: zilean-postgres
+   environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: zilean
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    volumes:
-      - zilean_pg_data:/var/lib/postgresql/data/pgdata
+   volumes:
+     - zilean_postgres:/var/lib/postgresql/data/pgdata
+   restart: unless-stopped
+   healthcheck:
+     test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+     timeout: 5s
+     interval: 10s
+     retries: 5
 
 volumes:
   zurg_data:
-  zilean_data:
-  elastic_data:
+  zilean_tmp:
+  zilean_postgres:

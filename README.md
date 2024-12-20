@@ -5,6 +5,8 @@ __Important: this is not a `docker compose up` and go type of ordeal. You'll nee
 
 __I'm still test driving this setup. Expect glitches.__
 
+__Also check out [Riven](https://github.com/rivenmedia/riven).__
+
 # Purpose
 The purpose of this stack is to create a functioning stack of *Arr powered tools that allow for the streaming of cached torrents via Real-Debrid. All of this using Docker Containers.
 
@@ -44,6 +46,7 @@ In a nutshell:
 - Request movies/series using Overseerr.
 - Hand the request over to Radarr/Sonarr.
 - Radarr/Sonarr instruct Prowlarr to search torrent indexers.
+- Zilean serves as an indexer that scrapes [Debrid Media Manager](https://github.com/debridmediamanager/debrid-media-manager).
 - Prowlarr returns found results to Radarr/Sonarr and pick a candidate.
 - Radarr/Sonarr hands the torrent over to the RDTClient Download Client.
 - RDTClient:
@@ -71,11 +74,12 @@ __If you are new to the *Arr stack, you must read the [Servarr Wiki](https://wik
 3. Take a look at the `setup.sh` script and run it using `./setup.sh`.
     - `sudo chmod +x setup.sh` if it is not executable.
 4. Reboot (virtual) machine.
-5. Run `docker compose up -d`.
-6. The first time you do this, `Zilean` is going to need some time to fill its database.
-    - Follow progress with `docker compose logs zilean -f`
-    - Continue when finished.
+5. The first time you run the stack `Zilean` is going to need some time to fill its database.
+    - Configure `Zilean` by editing/creating `${ROOT_DIR}/config/zilean-config/settings.json`. See [wiki](https://ipromknight.github.io/zilean/configuration.html) for guidance.
     - Why Zilean? Before Zilean I only used Torrentio, but practically zero series made it through the quality gates as prescribed by TRaSH-Guide. There appear to be some issues with the way Torrentio reports file sizes for season packs. You can of course use your preferred indexer instead and remove Zilean from the stack.
+6. Run `docker compose up -d`.
+    - Follow `Zilean` progress with `docker compose logs zilean -f`
+    - Continue when finished (could take >1H).
 7. Setup RDTClient:
     - Settings -> General:
         - Maximum parallel downloads = `100`
