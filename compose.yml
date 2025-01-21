@@ -205,7 +205,7 @@ services:
       - plex
 
   zilean:
-   image: ipromknight/zilean:v3.3.0
+   image: ipromknight/zilean:v3.3.3
    container_name: zilean
    tty: true
    volumes:
@@ -227,10 +227,13 @@ services:
    image: postgres:17.1
    container_name: zilean-postgres
    environment:
+      TZ: ${TIMEZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: zilean
+      # If you get WAL-related errors in Postgres, purge the zilean_postgres volume, uncomment below line and restart the stack. Zilean will have to repopulate the DB so it might take a while.
+      # POSTGRES_INITDB_ARGS: -c max_connections=200 -c shared_buffers=256MB -c effective_cache_size=8GB -c work_mem=16MB -c maintenance_work_mem=128MB -c min_wal_size=128MB -c max_wal_size=2GB -c checkpoint_completion_target=0.9 -c wal_buffers=16MB
    volumes:
      - zilean_postgres:/var/lib/postgresql/data/pgdata
    restart: unless-stopped
