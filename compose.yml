@@ -35,7 +35,7 @@ services:
       - "9999:9999"
     volumes:
       - ./zurg.yml:/app/config.yml
-      - zurg_data:/app/data
+      - ${ROOT_DIR}/zurg_data:/app/data
 
   rclone:
     image: rclone/rclone:latest
@@ -75,10 +75,12 @@ services:
       - PGID=${MEDIACENTER_GID}
       - UMASK=002
       - TZ=${TIMEZONE}
+      - LOGLEVEL=DEBUG
+      - LOG_LEVEL=DEBUG
     ports:
       - "6500:6500"
     volumes:
-      - ${ROOT_DIR}/data:/data
+      - ${ROOT_DIR}/data:/data:rshared
       - ${ROOT_DIR}/config/rdt-config:/data/db
     restart: unless-stopped
     depends_on:
@@ -98,7 +100,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${ROOT_DIR}/config/sonarr-config:/config
-      - ${ROOT_DIR}/data:/data
+      - ${ROOT_DIR}/data:/data:rshared
     ports:
       - "8989:8989"
     restart: unless-stopped
@@ -115,7 +117,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${ROOT_DIR}/config/radarr-config:/config
-      - ${ROOT_DIR}/data:/data
+      - ${ROOT_DIR}/data:/data:rshared
     ports:
       - "7878:7878"
     restart: unless-stopped
@@ -181,7 +183,8 @@ services:
       - PLEX_CLAIM=${PLEX_CLAIM}
     volumes:
       - ${ROOT_DIR}/config/plex-config:/config
-      - ${ROOT_DIR}/data:/data
+      - ${ROOT_DIR}/data:/data:rshared
+      - /mnt/media/media:/mnt/media
     restart: unless-stopped
     depends_on:
       - rclone
@@ -242,6 +245,23 @@ services:
      timeout: 5s
      interval: 10s
      retries: 5
+
+  requestrr:
+    image: thomst08/requestrr
+    container_name: requestrr
+    environment:
+      - PUID=${REQUESTRR_UID}
+      - PGID=${MEDIACENTER_GID}
+      - UMASK=002
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${ROOT_DIR}/config/requestrr-config/config:/app/config
+      - ${ROOT_DIR}/config/requestrr-config/examples.json:/root/locales/examples.json
+    ports:
+      - "4545:4545"
+    restart: unless-stopped
+    depends_on:
+      - overseerr
 
 volumes:
   zurg_data:
