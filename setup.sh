@@ -19,7 +19,8 @@ sudo useradd prowlarr -u $PROWLARR_UID
 sudo useradd overseerr -u $OVERSEERR_UID
 sudo useradd plex -u $PLEX_UID
 sudo useradd rdtclient -u $RDTCLIENT_UID
-sudo useradd autoscan -u $AUTOSCAN_UID
+sudo useradd autoscan -u $AUTOSCAN_UIDsudo 
+sudo useradd requestrr -u $REQUESTRR_UID
 
 # Adds all the service users to the group.
 # When you add the user to the group the changes don't take effect immediately. 
@@ -35,11 +36,13 @@ sudo usermod -a -G mediacenter overseerr
 sudo usermod -a -G mediacenter plex
 sudo usermod -a -G mediacenter rdtclient
 sudo usermod -a -G mediacenter autoscan
+sudo usermod -a -G requestrr autoscan
+
 
 # Create directories.
 # ${ROOT_DIR:-.}/ means take the value from ROOT_DIR value, if failed or empty place it in the current folder.
 # Application Configuration directories.
-sudo mkdir -pv ${ROOT_DIR:-.}/config/{sonarr,radarr,recyclarr,prowlarr,overseerr,plex,rdt,autoscan,zilean}-config
+sudo mkdir -pv ${ROOT_DIR:-.}/config/{sonarr,radarr,recyclarr,prowlarr,overseerr,plex,rdt,autoscan,zilean,requestrr}-config
 # Symlink directories.
 sudo mkdir -pv ${ROOT_DIR:-.}/data/symlinks/{radarr,sonarr}
 # Location symlinks resolve to.
@@ -62,5 +65,6 @@ sudo chown -R overseerr:mediacenter ${ROOT_DIR:-.}/config/overseerr-config
 sudo chown -R plex:mediacenter ${ROOT_DIR:-.}/config/plex-config
 sudo chown -R rdtclient:mediacenter ${ROOT_DIR:-.}/config/rdt-config
 sudo chown -R autoscan:mediacenter ${ROOT_DIR:-.}/config/autoscan-config
+sudo chown -R requestrr:mediacenter ${ROOT_DIR:-.}/config/requestrr-config
 
 echo "Done! It is recommended to reboot now."

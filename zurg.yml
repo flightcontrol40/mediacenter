@@ -1,6 +1,6 @@
 # Zurg configuration version
 zurg: v1
-token: API_KEY_GOES_HERE # https://real-debrid.com/apitoken
+token: 6JSX3HBDWQUPRAAVPE7YFTDRT25VWGXGB33NC35O3DOBPMSO4GRA # https://real-debrid.com/apitoken
 # host: "[::]"
 # port: 9999
 # username:
@@ -12,7 +12,7 @@ check_for_changes_every_secs: 10
 ignore_renames: true
 retain_rd_torrent_name: true
 retain_folder_name_extension: true
-enable_repair: false
+enable_repair: true
 auto_delete_rar_torrents: false
 get_torrents_count: 5000
 # api_timeout_secs: 15
